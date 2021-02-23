@@ -16,7 +16,7 @@ class Base(ABC):
     def feedforward(self, input_data) -> None:
         self.outputs = np.dot(np.transpose(self.weights), input_data)
 
-    def backprop(self, error) -> None:
+    def backprop(self, input_data, error, labels) -> None:
         pass #TODO
 
 
@@ -29,7 +29,7 @@ class LeakyReLU(Base):
         super().feedforward(input_data)
         self.outputs[self.outputs<0] *= self.epsilon
 
-    def backprop(self, input_data, error) -> None:
+    def backprop(self, input_data, error, labels) -> None:
         prime = np.copy(self.outputs)
         prime[prime >= 0] = 1
         prime[prime <0 ] = self.epsilon
@@ -52,7 +52,7 @@ class Softmax(Base):
         sum_ez = np.sum(ez, axis = 0)
         self.outputs = np.divide(ez, sum_ez)
 
-    def backprop(self, input_data, labels) -> None:
+    def backprop(self, input_data, error, labels) -> None:
         prime = np.copy(self.outputs)
         for i in range(labels.shape[0]):
             prime[labels[i]][i] -= 1

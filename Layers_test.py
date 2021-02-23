@@ -111,7 +111,7 @@ class Test_LeakyReLU:
         relu_layer = Layers.LeakyReLU(self.number_inputs, self.number_nodes)
         relu_layer.weights = self.known_weights
         relu_layer.feedforward(self.known_1D_input)
-        relu_layer.backprop(self.known_1D_input, self.known_1D_error)
+        relu_layer.backprop(self.known_1D_input, self.known_1D_error, None)
         assert np.array_equal(np.round(relu_layer.delta, 5), self.known_1D_delta)
 
 
@@ -183,11 +183,11 @@ class Test_Softmax:
         sm_layer = Layers.Softmax(self.number_inputs, self.number_nodes)
         sm_layer.weights = self.known_weights
         sm_layer.feedforward(self.known_1D_inputs)
-        sm_layer.backprop(self.known_1D_inputs, self.known_1D_label)
+        sm_layer.backprop(self.known_1D_inputs, None, self.known_1D_label)
         assert np.array_equal(np.round(sm_layer.delta, 5), self.known_1D_delta)
         assert np.array_equal(np.round(sm_layer.bp_error, 5), self.known_1D_bp_error)
 
         sm_layer.feedforward(self.known_2D_inputs)
-        sm_layer.backprop(self.known_2D_inputs, self.known_2D_labels)
+        sm_layer.backprop(self.known_2D_inputs, None, self.known_2D_labels)
         assert np.array_equal(np.round(sm_layer.delta, 5), self.known_2D_delta)
         assert np.array_equal(np.round(sm_layer.bp_error, 5), self.known_2D_bp_error)
