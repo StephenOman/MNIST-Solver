@@ -21,4 +21,4 @@ class Cross_Entropy(Base):
         self.loss = 0
 
     def calc_loss(self, target, categories, estimate) -> None:
-        self.loss = np.average(-1 * self.one_hot(target, categories) * np.log(estimate))
+        self.loss = np.sum(-1 * np.transpose(self.one_hot(target, categories)) * np.log(estimate)) / estimate[0].shape[0]

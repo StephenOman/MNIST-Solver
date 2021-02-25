@@ -41,6 +41,9 @@ class LeakyReLU(Base):
 
         self.learn_delta = self.delta * self.learn_rate
 
+        # Error to be propagated to previous layers
+        self.bp_error = np.dot(self.weights, prime)
+
 
 class Softmax(Base):
     def __init__(self, num_inputs, num_nodes, learn_rate = 0.1) -> None:

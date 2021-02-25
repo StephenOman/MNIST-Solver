@@ -25,13 +25,14 @@ class Neural_Network:
                 batch_end = input_data.shape[0]
             
             while(batch_start < input_data.shape[0]):
-                inputs = input_data[batch_start:batch_end]
+                inputs = np.transpose(input_data[batch_start:batch_end])
                 labels = input_labels[batch_start:batch_end]
                 
                 for layer in self.layers:
                     layer.feedforward(inputs)
+                    inputs = layer.outputs
 
-                self.loss.calc_loss(labels, categories, self.layers[-1].outputs)
+                self.loss.calc_loss(labels, categories, inputs)
 
                 error = None
                 for layer in reversed(self.layers):
@@ -48,7 +49,7 @@ class Neural_Network:
                     batch_end = input_data.shape[0]
                 batch_num = batch_num + 1
 
-            print("End of epoch with loss " + self.loss.loss)
+            print("End of epoch with loss " + str(self.loss.loss))
 
-        print("End of training with loss " + self.loss.loss)
+        print("End of training with loss " + str(self.loss.loss))
             
