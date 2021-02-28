@@ -1,10 +1,12 @@
-#import MNIST_Data as md
-#data = md.MNIST_Data(path="./mnist_data/")
-#data.read_train_labels()
-
+import Network
 import Layers
+import MNIST_Data
 
-l0 = Layers.LeakyReLU(3, 5)
+class MNIST_Solver:
 
-print(l0.weights)
+    def __init__(self, data: MNIST_Data.MNIST_Data) -> None:
+
+        nn = Network.Neural_Network()
+
+        nn.add_layer(Layers.LeakyReLU(data.train_images[0].shape), number_nodes)
 
