@@ -2,8 +2,8 @@ import numpy as np
 from abc import ABC
 
 class Flatten:
-    def __init__(self, input_data, instance_count, rows, columns) -> None:
-        self.data = input_data.reshape(instance_count, rows * columns)
+    def flatten(input_data, instance_count, rows, columns) -> np.array:
+        return input_data.reshape(instance_count, rows * columns)
 
 
 class Base(ABC):
@@ -44,6 +44,8 @@ class LeakyReLU(Base):
         # Error to be propagated to previous layers
         self.bp_error = np.dot(self.weights, prime)
 
+        self.weights = self.weights - self.learn_delta
+
 
 class Softmax(Base):
     def __init__(self, num_inputs, num_nodes, learn_rate = 0.1) -> None:
@@ -68,3 +70,5 @@ class Softmax(Base):
 
         # Error to be propagated to previous layers
         self.bp_error = np.dot(self.weights, prime)
+
+        self.weights = self.weights - self.learn_delta
