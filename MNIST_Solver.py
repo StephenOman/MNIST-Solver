@@ -18,7 +18,6 @@ class MNIST_Solver:
     def train(self, data: MNIST_Data.MNIST_Data, batch_size: int, epochs: int) -> None:
 
         flat_data = Layers.Flatten.flatten(data.train_images, 60000, 28, 28)
-        print(flat_data.shape)
         self.nn.train(flat_data, data.train_labels, self.categories, batch_size, epochs)
         
 

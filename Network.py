@@ -33,6 +33,8 @@ class Neural_Network:
                     inputs = layer.outputs
 
                 self.loss.calc_loss(labels, categories, inputs)
+                if(batch_num % 100 == 0):
+                    print("Current loss (batch " + str(batch_num) + ") " + str(self.loss.loss))
 
                 error = None
                 for layer in reversed(self.layers):

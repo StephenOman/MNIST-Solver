@@ -49,5 +49,7 @@ class Test_Cross_Entropy:
         xe_loss.calc_loss(self.known_1D_label, self.known_categories, self.known_1D_estimates)
         assert np.round(xe_loss.loss, 3) == self.known_loss
 
+    def test_batch_calc_loss(self):
+        xe_loss = Loss.Cross_Entropy()
         xe_loss.calc_loss(self.known_batch_labels, self.known_categories, self.known_batch_estimates)
         assert np.round(xe_loss.loss, 3) == self.known_batch_loss
