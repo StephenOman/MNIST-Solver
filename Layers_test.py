@@ -7,10 +7,10 @@ class Test_Base:
     # data for testing
     number_inputs = 3
     number_nodes = 5
-    known_1D_input = np.transpose(np.array([[1,2,3]]))
-    expected_1D_output = np.transpose(np.array([[-0.77, 0.84, -0.91, 0.98, 0.75]]))
+    known_single_input = np.transpose(np.array([[1,2,3]]))
+    expected_single_output = np.transpose(np.array([[-0.77, 0.84, -0.91, 0.98, 0.75]]))
 
-    known_2D_input = np.transpose(np.array([[1, 2, 3],
+    known_batch_input = np.transpose(np.array([[1, 2, 3],
                                             [3, 2, 1],
                                             [2, 1, 3],
                                             [3, 1, 2]]))
@@ -21,7 +21,7 @@ class Test_Base:
                                 [-0.6, 0.7, -0.8, 0.9, -0.1],
                                 [0.11, -0.12, 0.13, -0.14, 0.15]])
     
-    expected_2D_output = np.transpose(np.array([[-0.77, 0.84, -0.91, 0.98, 0.75], 
+    expected_batch_output = np.transpose(np.array([[-0.77, 0.84, -0.91, 0.98, 0.75], 
                                             [-0.79, 0.68, -0.57, 0.46, 1.45],
                                             [-0.07, -0.06, 0.19, -0.32, 1.35],
                                             [-0.08, -0.14, 0.36, -0.58, 1.7]]))
@@ -40,13 +40,13 @@ class Test_Base:
         base_layer = Test_Base.Conc_Layer(self.number_inputs, self.number_nodes)
         # Override the random weights with the known weights
         base_layer.weights = self.known_weights
-        base_layer.feedforward(self.known_1D_input)
-        assert base_layer.outputs.shape == self.expected_1D_output.shape
-        assert np.array_equal(np.round(base_layer.outputs,2), self.expected_1D_output)
+        base_layer.feedforward(self.known_single_input)
+        assert base_layer.outputs.shape == self.expected_single_output.shape
+        assert np.array_equal(np.round(base_layer.outputs,2), self.expected_single_output)
 
-        base_layer.feedforward(self.known_2D_input)
-        assert base_layer.outputs.shape == self.expected_2D_output.shape
-        assert np.array_equal(np.round(base_layer.outputs,2), self.expected_2D_output)
+        base_layer.feedforward(self.known_batch_input)
+        assert base_layer.outputs.shape == self.expected_batch_output.shape
+        assert np.array_equal(np.round(base_layer.outputs,2), self.expected_batch_output)
 
     # No test required for backprop method
     # as it doesn't actually do anything
@@ -62,25 +62,34 @@ class Test_LeakyReLU:
     number_nodes = 5
     epsilon = 0.2
 
-    known_1D_input = np.transpose(np.array([[1,2,3]]))
-    expected_1D_output = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75]]))
-    known_1D_error = np.transpose(np.array([[0.18923, -0.23037, 0.27152, -0.31266, 0.11230]]))
-    known_1D_delta = np.transpose(np.array([[0.01892, 0.03785, 0.05677],
+    known_single_input = np.transpose(np.array([[1,2,3]]))
+    expected_single_output = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75]]))
+    known_single_error = np.transpose(np.array([[0.18923, -0.23037, 0.27152, -0.31266, 0.11230]]))
+    known_single_delta = np.transpose(np.array([[0.01892, 0.03785, 0.05677],
                                             [-0.23037, -0.46074, -0.69111],
                                             [0.02715, 0.05430, 0.08146],
                                             [-0.31266, -0.62532, -0.93798],
                                             [0.11230, 0.2246, 0.33690]]))
 
     # Batch of inputs
-    known_2D_input = np.transpose(np.array([[1, 2, 3],
+    known_batch_input = np.transpose(np.array([[1, 2, 3],
                                             [3, 2, 1],
                                             [2, 1, 3],
                                             [3, 1, 2]]))
                                             
-    expected_2D_output = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75],
+    expected_batch_output = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75],
                                             [-0.079, 0.68, -0.057, 0.46, 1.45],
                                             [-0.007, -0.006, 0.19, -0.032, 1.35],
                                             [-0.008, -0.014, 0.36, -0.058, 1.7]]))
+
+    known_batch_error = np.transpose(np.array([[0.18923, -0.23037, 0.27152, -0.31266, 0.11230],
+                                                [0.36722, -0.45182, 0.53643, -0.62103, 0.23631],
+                                                [-0.12151, 0.18480, -0.24810, 0.31138, -0.21449],
+                                                [-0.09728, 0.05955, -0.02183, -0.01590, 0.16963]]))
+
+    known_batch_delta = np.array([[0.01890,	-0.38275, -0.09340,	-0.52956, 0.22529],
+                                [0.02235, -0.33499, -0.02708, -0.45946, 0.16309],
+                                [0.00940, -0.26890, -0.16322, -0.36719, 0.06725]])
 
 
     known_weights = np.array([[0.1, -0.2, 0.3, -0.4, 0.5],
@@ -101,18 +110,25 @@ class Test_LeakyReLU:
     def test_feedforward(self):
         relu_layer = Layers.LeakyReLU(self.number_inputs, self.number_nodes)
         relu_layer.weights = self.known_weights
-        relu_layer.feedforward(self.known_1D_input)
-        assert np.array_equal(np.round(relu_layer.outputs,3), self.expected_1D_output)
+        relu_layer.feedforward(self.known_single_input)
+        assert np.array_equal(np.round(relu_layer.outputs,3), self.expected_single_output)
 
-        relu_layer.feedforward(self.known_2D_input)
-        assert np.array_equal(np.round(relu_layer.outputs,3), self.expected_2D_output)
+        relu_layer.feedforward(self.known_batch_input)
+        assert np.array_equal(np.round(relu_layer.outputs,3), self.expected_batch_output)
 
     def test_backprop(self):
         relu_layer = Layers.LeakyReLU(self.number_inputs, self.number_nodes)
         relu_layer.weights = self.known_weights
-        relu_layer.feedforward(self.known_1D_input)
-        relu_layer.backprop(self.known_1D_input, self.known_1D_error, None)
-        assert np.array_equal(np.round(relu_layer.delta, 5), self.known_1D_delta)
+        relu_layer.feedforward(self.known_single_input)
+        relu_layer.backprop(self.known_single_error, None)
+        assert np.array_equal(np.round(relu_layer.delta, 5), self.known_single_delta)
+
+    def test_batch_backprop(self):
+        relu_layer = Layers.LeakyReLU(self.number_inputs, self.number_nodes)
+        relu_layer.weights = self.known_weights
+        relu_layer.feedforward(self.known_batch_input)
+        relu_layer.backprop(self.known_batch_error, None)
+        assert np.array_equal(np.round(relu_layer.delta, 5), self.known_batch_delta)
 
 
 # Softmax Layer Tests
@@ -126,7 +142,7 @@ class Test_Softmax:
     expected_1D_output = np.transpose(np.array([[0.129, 0.732, 0.139]]))
 
     # Batch of inputs
-    known_2D_inputs = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75],
+    known_batch_inputs = np.transpose(np.array([[-0.077, 0.84, -0.091, 0.98, 0.75],
                                             [-0.079, 0.68, -0.057, 0.46, 1.45],
                                             [-0.007, -0.006, 0.19, -0.032, 1.35],
                                             [-0.008, -0.014, 0.36, -0.058, 1.7]]))
@@ -176,18 +192,21 @@ class Test_Softmax:
         sm_layer.feedforward(self.known_1D_inputs)
         assert np.array_equal(np.round(sm_layer.outputs,3), self.expected_1D_output)
 
-        sm_layer.feedforward(self.known_2D_inputs)
+        sm_layer.feedforward(self.known_batch_inputs)
         assert np.array_equal(np.round(sm_layer.outputs,3), self.expected_2D_output)
 
-    def test_backprop(self):
+    def test_1d_backprop(self):
         sm_layer = Layers.Softmax(self.number_inputs, self.number_nodes)
         sm_layer.weights = self.known_weights
         sm_layer.feedforward(self.known_1D_inputs)
-        sm_layer.backprop(self.known_1D_inputs, None, self.known_1D_label)
+        sm_layer.backprop(None, self.known_1D_label)
         assert np.array_equal(np.round(sm_layer.delta, 5), self.known_1D_delta)
         assert np.array_equal(np.round(sm_layer.bp_error, 5), self.known_1D_bp_error)
 
-        sm_layer.feedforward(self.known_2D_inputs)
-        sm_layer.backprop(self.known_2D_inputs, None, self.known_2D_labels)
+    def test_batch_backprop(self):
+        sm_layer = Layers.Softmax(self.number_inputs, self.number_nodes)
+        sm_layer.weights = self.known_weights
+        sm_layer.feedforward(self.known_batch_inputs)
+        sm_layer.backprop(None, self.known_2D_labels)
         assert np.array_equal(np.round(sm_layer.delta, 5), self.known_2D_delta)
         assert np.array_equal(np.round(sm_layer.bp_error, 5), self.known_2D_bp_error)

@@ -36,7 +36,7 @@ class Neural_Network:
 
                 error = None
                 for layer in reversed(self.layers):
-                    layer.backprop(inputs, error, labels)
+                    layer.backprop(error, labels)
                     error = layer.bp_error
 
                 batch_start = batch_start + batch_size
