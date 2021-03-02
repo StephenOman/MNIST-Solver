@@ -24,6 +24,14 @@ class MNIST_Solver:
         self.flat_train_data = Layers.Flatten.flatten(data.train_images, 60000, 28, 28)
         self.flat_test_data = Layers.Flatten.flatten(data.test_images, 10000, 28, 28)
 
+    def save():
+        pass
+        #TODO
+
+    def load():
+        pass
+        #TODO
+        
     def train(self, batch_size: int, epochs: int) -> None:
         
         self.nn.train(self.flat_train_data, data.train_labels, self.categories, batch_size, epochs)
@@ -47,7 +55,9 @@ class MNIST_Solver:
 data = MNIST_Data.MNIST_Data(path="./mnist_data/")
 data.read_all_data()
 
-network = MNIST_Solver(data)
-network.train(50, 5)
+model = MNIST_Solver(data)
+model.train(50, 5)
 
-network.print_img(1234)
+#model.print_img(1234)
+
+model.nn.metrics(model.flat_test_data, model.data.test_labels)
