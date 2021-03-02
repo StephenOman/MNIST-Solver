@@ -71,7 +71,6 @@ class MNIST_Data:
             with open(filename, 'rb') as f:
                 data_magic, data_images_count, self.rows, self.columns = struct.unpack('>LLLL', f.read(16))
                 image_data = np.fromfile(f, dtype=np.uint8)
-                image_data = image_data / 255.0     # normalise data to between 0 and 1
         except Exception as e:
             print("Exception reading from " + filename)
             print(e.message)

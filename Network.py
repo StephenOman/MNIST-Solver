@@ -10,6 +10,18 @@ class Neural_Network:
     def add_loss(self, loss) -> None:
         self.loss = loss
 
+    def feedforward(self, input_data: np.array) -> np.array:
+        inputs = np.transpose(input_data)
+        for layer in self.layers:
+            layer.feedforward(inputs)
+            inputs = layer.outputs
+        return inputs
+
+    def backprop(self, error, labels) -> None:
+        for layer in reversed(self.layers):
+            layer.backprop(error, labels)
+            error = layer.bp_error
+
     def train(self, input_data, input_labels, categories, batch_size, epochs = 5) -> None:
 
         # TODO - check for well-formed network before running training
@@ -25,21 +37,17 @@ class Neural_Network:
                 batch_end = input_data.shape[0]
             
             while(batch_start < input_data.shape[0]):
-                inputs = np.transpose(input_data[batch_start:batch_end])
+                inputs = input_data[batch_start:batch_end]
                 labels = input_labels[batch_start:batch_end]
                 
-                for layer in self.layers:
-                    layer.feedforward(inputs)
-                    inputs = layer.outputs
+                output = self.feedforward(inputs)
 
-                self.loss.calc_loss(labels, categories, inputs)
-                if(batch_num % 100 == 0):
-                    print("Current loss (batch " + str(batch_num) + ") " + str(self.loss.loss))
+                self.loss.calc_loss(labels, categories, output)
+                #if(batch_num % 100 == 0):
+                #    print("Current loss (batch " + str(batch_num) + ") " + str(self.loss.loss))
 
                 error = None
-                for layer in reversed(self.layers):
-                    layer.backprop(error, labels)
-                    error = layer.bp_error
+                self.backprop(error, labels)
 
                 batch_start = batch_start + batch_size
                 batch_end = batch_end + batch_size
