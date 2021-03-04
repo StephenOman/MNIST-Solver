@@ -2,6 +2,7 @@ import Network
 import Layers
 import Loss
 import MNIST_Data
+import pickle
 
 import numpy as np
 
@@ -24,17 +25,17 @@ class MNIST_Solver:
         self.flat_train_data = Layers.Flatten.flatten(data.train_images, 60000, 28, 28)
         self.flat_test_data = Layers.Flatten.flatten(data.test_images, 10000, 28, 28)
 
-    def save():
-        pass
-        #TODO
+    def save(self, model_file = "mnist.model"):
+        self.nn.clear_data()
+        with open(model_file, 'wb') as f:
+            pickle.dump(self.nn, f)
 
-    def load():
-        pass
-        #TODO
-        
+    def load(self, model_file = "mnist.model"):
+        with open(model_file, 'rb') as f:
+            self.nn = pickle.load(f)
+
     def train(self, batch_size: int, epochs: int) -> None:
-        
-        self.nn.train(self.flat_train_data, data.train_labels, self.categories, batch_size, epochs)
+        self.nn.train(self.flat_train_data, self.data.train_labels, self.categories, batch_size, epochs)
 
     def print_img(self, image: int) -> None:
         # Test a particular value from the test set
@@ -51,13 +52,3 @@ class MNIST_Solver:
         plt.title(heading)
         plt.show()
         
-
-data = MNIST_Data.MNIST_Data(path="./mnist_data/")
-data.read_all_data()
-
-model = MNIST_Solver(data)
-model.train(50, 5)
-
-#model.print_img(1234)
-
-model.nn.metrics(model.flat_test_data, model.data.test_labels)

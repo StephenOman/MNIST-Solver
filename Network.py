@@ -119,3 +119,9 @@ class Neural_Network:
             print("{0:^5} {1:5} {2:8} {3:9.5f} {4:6} {5:6} {6:6} {7:6} {8:10.5f} {9:8.5f} {10:12.5f} {11:8.5f}"
                 .format(digit, total, correct, accuracy, tp, fp, tn, fn, 
                         precision, recall, specificity, f1score))
+
+    def clear_data(self):
+       for layer in self.layers:
+           layer.inputs = None
+           layer.outputs = None
+           layer.bp_error = None

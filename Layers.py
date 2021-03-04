@@ -38,14 +38,14 @@ class LeakyReLU(Base):
 
         dir_matrix = np.dot(self.inputs, np.transpose(prime))
 
-        self.delta = dir_matrix / self.inputs.shape[1]
+        delta = dir_matrix / self.inputs.shape[1]
 
-        self.learn_delta = self.delta * self.learn_rate
+        learn_delta = delta * self.learn_rate
 
         # Error to be propagated to previous layers
         self.bp_error = np.dot(self.weights, prime)
 
-        self.weights = self.weights - self.learn_delta
+        self.weights = self.weights - learn_delta
 
 
 class Softmax(Base):
