@@ -41,7 +41,7 @@ $ python model_check.py
 ```
 
 This will produce a table of statistics similar to this one:
-
+```
 Total predictions  10000
 Total correct predictions  9436
 Overall model accuracy 0.9436 
@@ -57,9 +57,15 @@ Digit Total  Correct  Accuracy     TP     FN     FP     TN  Precision   Recall  
   7    1028      940   0.91440    940     21   8951     88    0.97815  0.91440      0.99766  0.94520
   8     974      892   0.91581    892     57   8969     82    0.93994  0.91581      0.99368  0.92772
   9    1009      941   0.93261    941     75   8916     68    0.92618  0.93261      0.99166  0.92938
+```
 
 TP, FN, FP and TN are True Positive, False Negative, False Positive and True Negative respectively.
 
 The model checker will also produce a sample prediction.
 
 ![Sample Prediction](/test_image_1307.png)
+
+## Tests
+
+There are some tests for the Loss function, the Layers classes and the Network class. They are run with pytest.
+
