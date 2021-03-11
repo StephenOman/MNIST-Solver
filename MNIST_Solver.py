@@ -10,12 +10,12 @@ from matplotlib import pyplot as plt
 
 class MNIST_Solver:
 
-    def __init__(self, data: MNIST_Data.MNIST_Data) -> None:
+    def __init__(self, data: MNIST_Data.MNIST_Data, bias=False) -> None:
 
         self.nn = Network.Neural_Network()
 
-        self.nn.add_layer(Layers.LeakyReLU(784, 512))
-        self.nn.add_layer(Layers.Softmax(512, 10))
+        self.nn.add_layer(Layers.LeakyReLU(784, 512, bias))
+        self.nn.add_layer(Layers.Softmax(512, 10, bias))
         self.nn.add_loss(Loss.Cross_Entropy())
 
         self.categories = 10

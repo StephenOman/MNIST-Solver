@@ -1,8 +1,10 @@
 import numpy as np
+from matplotlib import pyplot as plt
 
 class Neural_Network:
     def __init__(self, learn_rate = 0.1) -> None:
         self.layers = []
+        self.loss_track = []
 
     def add_layer(self, layer) -> None:
         self.layers.append(layer)
@@ -43,6 +45,7 @@ class Neural_Network:
                 output = self.feedforward(inputs)
 
                 self.loss.calc_loss(labels, categories, output)
+                self.loss_track.append(self.loss.loss)
                 #if(batch_num % 100 == 0):
                 #    print("Current loss (batch " + str(batch_num) + ") " + str(self.loss.loss))
 
@@ -125,3 +128,12 @@ class Neural_Network:
            layer.inputs = None
            layer.outputs = None
            layer.bp_error = None
+
+    def graph_training_loss(self):
+        fig, ax = plt.subplots()
+
+        plt.title("Training Loss")
+        ax.plot(self.loss_track)
+        ax.set_xlabel("Batch")
+        ax.set_ylabel("Loss")
+        plt.show()

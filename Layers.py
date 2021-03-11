@@ -34,7 +34,7 @@ class Base(ABC):
 
         # Error to be propagated to previous layers
         if(self.bias):
-            self.bp_error = np.dot(self.weights, error) # TODO
+            self.bp_error = np.dot(self.weights[1:], error)
         else:
             self.bp_error = np.dot(self.weights, error)
 
