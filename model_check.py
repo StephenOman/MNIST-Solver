@@ -10,4 +10,4 @@ model.load(model_file="mnist_bias.model")
 
 model.nn.metrics(model.flat_test_data, model.data.test_labels)
 
-model.print_img(6666)
+model.print_img(1307)
