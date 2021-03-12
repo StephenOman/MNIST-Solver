@@ -1,3 +1,4 @@
+import time
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -27,7 +28,8 @@ class Neural_Network:
     def train(self, input_data, input_labels, categories, batch_size, epochs = 5) -> None:
 
         # TODO - check for well-formed network before running training
-
+        t_start = time.perf_counter()
+        
         for epoch in range(epochs):
             batch_start = 0
             batch_end = batch_start + batch_size
@@ -64,6 +66,8 @@ class Neural_Network:
 
             print("End of epoch with loss " + str(self.loss.loss))
 
+        t_end = time.perf_counter()
+        print('Elapsed time ', t_end - t_start)     
         print("End of training with loss " + str(self.loss.loss))
 
 
