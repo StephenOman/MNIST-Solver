@@ -2,20 +2,20 @@ import Network
 import Layers
 import Loss
 import MNIST_Data
+import Config
 import pickle
-
 import numpy as np
 
 from matplotlib import pyplot as plt
 
 class MNIST_Solver:
 
-    def __init__(self, data: MNIST_Data.MNIST_Data, bias=False) -> None:
+    def __init__(self, data: MNIST_Data.MNIST_Data, config: Config.Config) -> None:
 
         self.nn = Network.Neural_Network()
 
-        self.nn.add_layer(Layers.LeakyReLU(784, 512, bias))
-        self.nn.add_layer(Layers.Softmax(512, 10, bias))
+        self.nn.add_layer(Layers.LeakyReLU(784, 512, config.bias, learn_rate=config.learn_rate))
+        self.nn.add_layer(Layers.Softmax(512, 10, config.bias, learn_rate=config.learn_rate))
         self.nn.add_loss(Loss.Cross_Entropy())
 
         self.categories = 10
@@ -34,8 +34,8 @@ class MNIST_Solver:
         with open(model_file, 'rb') as f:
             self.nn = pickle.load(f)
 
-    def train(self, batch_size: int, epochs: int) -> None:
-        self.nn.train(self.flat_train_data, self.data.train_labels, self.categories, batch_size, epochs)
+    def train(self, config: Config.Config) -> None:
+        self.nn.train(self.flat_train_data, self.data.train_labels, self.categories, config)
 
     def print_img(self, image: int) -> None:
         # Test a particular value from the test set

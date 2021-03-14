@@ -2,8 +2,10 @@ import time
 import numpy as np
 from matplotlib import pyplot as plt
 
+import Config
+
 class Neural_Network:
-    def __init__(self, learn_rate = 0.1) -> None:
+    def __init__(self) -> None:
         self.layers = []
         self.loss_track = []
 
@@ -25,14 +27,14 @@ class Neural_Network:
             layer.backprop(error, labels)
             error = layer.bp_error
 
-    def train(self, input_data, input_labels, categories, batch_size, epochs = 5) -> None:
+    def train(self, input_data, input_labels, categories: int, config: Config.Config) -> None:
 
         # TODO - check for well-formed network before running training
         t_start = time.perf_counter()
-        
-        for epoch in range(epochs):
+
+        for epoch in range(config.epochs):
             batch_start = 0
-            batch_end = batch_start + batch_size
+            batch_end = batch_start + config.batch_size
             batch_num = 1
 
             # In the case where batch size is set to be
@@ -54,8 +56,8 @@ class Neural_Network:
                 error = None
                 self.backprop(error, labels)
 
-                batch_start = batch_start + batch_size
-                batch_end = batch_end + batch_size
+                batch_start = batch_start + config.batch_size
+                batch_end = batch_end + config.batch_size
 
                 # check for last batch size being greater
                 # than the number of remaining instances
