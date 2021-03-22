@@ -22,12 +22,12 @@ These are the various libraries that I've used to create this solution.
 
 Jupyter 1.0.0
 
-## Running the Python Builder
+## Running the Model Builder
 
 To build a model using the training set:
 
 ```
-$ python model_build.py
+$ python model_build.py [--config config.filename]
 ```
 
 By default, this will create the "mnist.model" file. It will also produce a graph of the loss of each batch through the training run.
@@ -64,6 +64,23 @@ TP, FN, FP and TN are True Positive, False Negative, False Positive and True Neg
 The model checker will also produce a sample prediction.
 
 ![Sample Prediction](/test_image_1307.png)
+
+## Configuration
+
+An optional configuration file can be passed as a parameter to the Model Builder. The following settings can override the defaults:
+
+### General Settings
+* path_to_mnist_data   overrides the location of the MNIST dataset (default is './mnist_data/'
+* model_name           change the name of the file that the builder will save the model to (default is mnist.model)
+* bias                 include bias signals to every neuron (default is true)
+* categories           number of categories in the dataset (default is 10)
+
+### Network Settings
+* learn_rate           change the learning rate hyperparameter used to train the network (default is 0.1)
+
+### Training Settings
+* batch_size           set the size of the batches (default is 50)
+* epochs               set the number of epochs to train the network (default is 5)
 
 ## Tests
 
